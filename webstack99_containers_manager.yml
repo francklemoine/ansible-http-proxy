@@ -1,0 +1,19 @@
+---
+
+# tags:
+#   httpd_configure:       httpd -> configure web server
+
+
+- name: webstack99 (http proxy configuration)
+  hosts: webstack99
+  vars:
+    project_name: webstack99
+    #
+    httpd_container: webstack99_reverse_proxy_webserver_1
+    httpd_prefix: /usr/local/apache2
+    httpd_conf_files: [ '010-httpd-vhosts-dokuwiki.conf' ]
+#    httpd_conf_files: [ '020-httpd-ssl-dokuwiki.conf' ]
+    httpd_extra_files: []
+    #
+  roles:
+    - manager

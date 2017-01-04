@@ -1,0 +1,82 @@
+---
+
+- assert:
+    that:
+      - 'project_name        != ""'
+  tags:
+    - all
+
+
+- assert:
+    that:
+      - 'httpd_prefix        != ""'
+      - 'httpd_container     != ""'
+  tags:
+    - httpd_configure
+
+
+################################################################################
+########## HTTPD
+################################################################################
+- name: copy httpd files (conf)
+  template:
+    src: "../templates/{{ item }}"
+    dest: "/tmp/{{ item }}"
+  with_items:
+    - "{{ httpd_conf_files }}"
+  tags:
+    - httpd_configure
+
+
+- name: configure httpd (conf)
+  command: "docker cp /tmp/{{ item }} {{ httpd_container }}:{{ httpd_prefix }}/conf-enabled"
+  with_items:
+    - "{{ httpd_conf_files }}"
+  tags:
+    - httpd_configure
+
+
+- name: remove httpd files (conf)
+  file:
+    path: "/tmp/{{ item }}"
+    state: absent
+  with_items:
+    - "{{ httpd_conf_files }}"
+  tags:
+    - httpd_configure
+
+
+- name: copy httpd files (extra)
+  template:
+    src: "../templates/{{ item }}"
+    dest: "/tmp/{{ item }}"
+  with_items:
+    - "{{ httpd_extra_files }}"
+  tags:
+    - httpd_configure
+
+
+- name: configure httpd (extra)
+  command: "docker cp /tmp/{{ item }} {{ httpd_container }}:{{ httpd_prefix }}/conf/extra"
+  with_items:
+    - "{{ httpd_extra_files }}"
+  tags:
+    - httpd_configure
+
+
+- name: remove httpd files (extra)
+  file:
+    path: "/tmp/{{ item }}"
+    state: absent
+  with_items:
+    - "{{ httpd_extra_files }}"
+  tags:
+    - httpd_configure
+
+
+- name: restart httpd service
+  service:
+    name: "{{ project_name }}"
+    state: restarted
+  tags:
+    - httpd_configure
