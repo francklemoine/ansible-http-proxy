@@ -10,9 +10,9 @@ Install
 1. Configure httpd server
 
     * Step1: import http configuration file to container
-	`ansible-playbook -i hosts --become --ask-become-pass --tags httpd_configure webstack99_containers_manager.yml`
+	`ansible-playbook -i inventory/hosts --become --ask-become-pass --tags httpd_configure webstack99_containers_manager.yml`
 
     * Step2: stop/start webstack99 containers to get letsencrypt certificate
 
     * Step3: import https configuration file to container
-    `ansible-playbook -i hosts --become --ask-become-pass --tags httpd_configure webstack99_containers_manager.yml`
+    `ansible-playbook -i inventory/hosts --become --ask-become-pass --tags httpd_configure webstack99_containers_manager.yml`
